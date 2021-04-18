@@ -1,0 +1,22 @@
+server:
+  port: 8001
+  servlet:
+    contextPath: /api/
+
+spring:
+  data:
+    dynamodb:
+      entity2ddl:
+        auto: create-only
+        readCapacity: 5
+        writeCapacity: 5
+
+product-scraper:
+  aws:
+    user-credentials:
+      access-key:
+      secret-key:
+    region: eu-west-1
+    dynamodb:
+      table-names:
+        products: products
