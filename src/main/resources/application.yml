@@ -13,10 +13,4 @@ spring:
 
 product-scraper:
   aws:
-    user-credentials:
-      access-key:
-      secret-key:
     region: eu-west-1
-    dynamodb:
-      table-names:
-        products: products

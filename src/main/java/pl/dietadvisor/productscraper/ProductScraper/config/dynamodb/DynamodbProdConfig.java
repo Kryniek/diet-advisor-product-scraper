@@ -1,4 +1,4 @@
-package pl.dietadvisor.productscraper.ProductScraper.config;
+package pl.dietadvisor.productscraper.ProductScraper.config.dynamodb;
 
 import com.amazonaws.ClientConfiguration;
 import com.amazonaws.auth.AWSCredentialsProvider;
@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.socialsignin.spring.data.dynamodb.repository.config.EnableDynamoDBRepositories;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import pl.dietadvisor.productscraper.ProductScraper.config.properties.AwsProperties;
 import pl.dietadvisor.productscraper.ProductScraper.config.properties.UserCredentialsProperties;
 
@@ -19,7 +20,8 @@ import static com.amazonaws.Protocol.HTTPS;
 @Configuration
 @EnableDynamoDBRepositories(basePackages = "pl.dietadvisor.productscraper.ProductScraper.repository")
 @RequiredArgsConstructor
-public class DynamodbConfig {
+@Profile("prod")
+public class DynamodbProdConfig {
     private final AwsProperties awsProperties;
 
     @Bean

@@ -1,0 +1,5 @@
+product-scraper:
+  aws:
+    user-credentials:
+      access-key:
+      secret-key:

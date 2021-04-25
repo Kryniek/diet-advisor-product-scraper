@@ -10,5 +10,5 @@ import org.springframework.context.annotation.Configuration;
 public class AwsProperties {
     private UserCredentialsProperties userCredentials;
     private String region;
-    private DynamodbProperties dynamodb;
+    private String url;
 }

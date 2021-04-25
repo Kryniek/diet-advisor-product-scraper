@@ -1,0 +1,3 @@
+product-scraper:
+  aws:
+    url: http://localhost:8000
