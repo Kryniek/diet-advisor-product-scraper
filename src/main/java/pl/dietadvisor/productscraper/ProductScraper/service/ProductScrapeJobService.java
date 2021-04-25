@@ -3,6 +3,7 @@ package pl.dietadvisor.productscraper.ProductScraper.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.dietadvisor.productscraper.ProductScraper.model.ProductScrapeJob;
+import pl.dietadvisor.productscraper.ProductScraper.producer.ProductScrapeJobProducer;
 import pl.dietadvisor.productscraper.ProductScraper.repository.ProductScrapeJobRepository;
 
 import java.util.List;
@@ -16,6 +17,7 @@ import static pl.dietadvisor.productscraper.ProductScraper.enums.ProductScrapeJo
 @RequiredArgsConstructor
 public class ProductScrapeJobService {
     private final ProductScrapeJobRepository repository;
+    private final ProductScrapeJobProducer productScrapeJobProducer;
 
     public List<ProductScrapeJob> get() {
         return (List<ProductScrapeJob>) repository.findAll();
@@ -25,12 +27,13 @@ public class ProductScrapeJobService {
         return repository.findById(id).orElseThrow();
     }
 
-    public ProductScrapeJob create(ProductScrapeJob productScrapeJob) {
-        productScrapeJob.setId(null);
-        productScrapeJob.setState(CREATED);
-        productScrapeJob.setCreatedAt(now());
-
-        return repository.save(productScrapeJob);
+    public ProductScrapeJob create() {
+        ProductScrapeJob productScrapeJob = repository.save(ProductScrapeJob.builder()
+                .state(CREATED)
+                .createdAt(now())
+                .build());
+        productScrapeJobProducer.send(productScrapeJob);
+        return productScrapeJob;
     }
 
     public ProductScrapeJob update(ProductScrapeJob productScrapeJob) {

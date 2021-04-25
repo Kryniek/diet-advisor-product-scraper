@@ -12,8 +12,8 @@ import org.socialsignin.spring.data.dynamodb.repository.config.EnableDynamoDBRep
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import pl.dietadvisor.productscraper.ProductScraper.config.properties.AwsProperties;
-import pl.dietadvisor.productscraper.ProductScraper.config.properties.UserCredentialsProperties;
+import pl.dietadvisor.productscraper.ProductScraper.config.properties.aws.AwsProperties;
+import pl.dietadvisor.productscraper.ProductScraper.config.properties.aws.UserCredentialsProperties;
 
 import static com.amazonaws.Protocol.HTTPS;
 

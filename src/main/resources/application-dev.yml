@@ -1,3 +1,5 @@
 product-scraper:
   aws:
     url: http://localhost:8000
+  kafka:
+    bootstrap-servers: localhost:9092

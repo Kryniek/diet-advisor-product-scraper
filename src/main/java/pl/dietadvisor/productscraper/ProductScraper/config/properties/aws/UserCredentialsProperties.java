@@ -1,4 +1,4 @@
-package pl.dietadvisor.productscraper.ProductScraper.config.properties;
+package pl.dietadvisor.productscraper.ProductScraper.config.properties.aws;
 
 import lombok.Data;
 

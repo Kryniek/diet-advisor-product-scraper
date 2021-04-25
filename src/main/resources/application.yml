@@ -14,3 +14,11 @@ spring:
 product-scraper:
   aws:
     region: eu-west-1
+  kafka:
+    client:
+      id: diet-advisor-product-scraper
+    consumer:
+      group-id: products-scrape-job-group
+      auto-offset-reset: earliest
+    topic:
+      products-scrape-job: products-scrape-job-topic
