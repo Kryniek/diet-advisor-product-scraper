@@ -27,12 +27,14 @@ public class ProductScrapeJobService {
         return repository.findById(id).orElseThrow();
     }
 
-    public ProductScrapeJob create() {
+    public ProductScrapeJob create(ProductScrapeJob requestProductScrapeJob) {
         ProductScrapeJob productScrapeJob = repository.save(ProductScrapeJob.builder()
                 .state(CREATED)
+                .source(requestProductScrapeJob.getSource())
                 .createdAt(now())
                 .build());
         productScrapeJobProducer.send(productScrapeJob);
+
         return productScrapeJob;
     }
 

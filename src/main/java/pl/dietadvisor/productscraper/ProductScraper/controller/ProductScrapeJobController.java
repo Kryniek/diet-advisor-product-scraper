@@ -1,11 +1,17 @@
 package pl.dietadvisor.productscraper.ProductScraper.controller;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.dietadvisor.productscraper.ProductScraper.model.ProductScrapeJob;
 import pl.dietadvisor.productscraper.ProductScraper.service.ProductScrapeJobService;
 
+import javax.validation.constraints.NotBlank;
 import java.util.List;
+
+import static java.util.Objects.requireNonNull;
 
 @RestController
 @RequiredArgsConstructor
@@ -14,17 +20,19 @@ public class ProductScrapeJobController {
     private final ProductScrapeJobService service;
 
     @GetMapping
-    public List<ProductScrapeJob> get() {
-        return service.get();
+    public ResponseEntity<List<ProductScrapeJob>> get() {
+        return ResponseEntity.ok(service.get());
     }
 
     @GetMapping("/{id}")
-    public ProductScrapeJob getById(@PathVariable String id) {
-        return service.getById(id);
+    public ResponseEntity<ProductScrapeJob> getById(@PathVariable @NotBlank String id) {
+        return ResponseEntity.ok(service.getById(id));
     }
 
     @PostMapping
-    public ProductScrapeJob create() {
-        return service.create();
+    public ResponseEntity<ProductScrapeJob> create(@RequestBody @NonNull ProductScrapeJob productScrapeJob) {
+        requireNonNull(productScrapeJob.getSource(), "Source must be set.");
+
+        return new ResponseEntity<>(service.create(productScrapeJob), HttpStatus.CREATED);
     }
 }
