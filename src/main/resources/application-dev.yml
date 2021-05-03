@@ -3,3 +3,5 @@ product-scraper:
     url: http://localhost:8000
   kafka:
     bootstrap-servers: localhost:9092
+  selenium:
+    host: http://localhost:4444/wd/hub

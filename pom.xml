@@ -15,6 +15,7 @@
         <java.version>11</java.version>
         <lombok.version>1.18.20</lombok.version>
         <spring-data-dynamodb.version>5.2.5</spring-data-dynamodb.version>
+        <selenium-java.version>3.141.59</selenium-java.version>
     </properties>
     <dependencies>
         <!-- SPRING BOOT -->
@@ -42,6 +43,11 @@
             <groupId>io.github.boostchicken</groupId>
             <artifactId>spring-data-dynamodb</artifactId>
             <version>${spring-data-dynamodb.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>${selenium-java.version}</version>
         </dependency>
 
         <!-- TEST -->

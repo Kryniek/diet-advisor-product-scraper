@@ -22,10 +22,12 @@ public class ProductScrapeLogService {
         return repository.findById(id).orElseThrow();
     }
 
-    public ProductScrapeLog create(ProductScrapeLog product) {
-        product.setId(null);
-        product.setCreatedAt(now());
+    public List<ProductScrapeLog> createAll(List<ProductScrapeLog> productScrapeLogs) {
+        productScrapeLogs.forEach(productScrapeLog -> {
+            productScrapeLog.setId(null);
+            productScrapeLog.setCreatedAt(now());
+        });
 
-        return repository.save(product);
+        return (List<ProductScrapeLog>) repository.saveAll(productScrapeLogs);
     }
 }

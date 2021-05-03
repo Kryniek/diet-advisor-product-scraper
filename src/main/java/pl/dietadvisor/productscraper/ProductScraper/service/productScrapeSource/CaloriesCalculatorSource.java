@@ -1,0 +1,107 @@
+package pl.dietadvisor.productscraper.ProductScraper.service.productScrapeSource;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.springframework.stereotype.Service;
+import pl.dietadvisor.productscraper.ProductScraper.definition.productScrapeSource.ProductScrapeSource;
+import pl.dietadvisor.productscraper.ProductScraper.enums.ProductScrapeJobSource;
+import pl.dietadvisor.productscraper.ProductScraper.model.ProductScrapeJob;
+import pl.dietadvisor.productscraper.ProductScraper.model.ProductScrapeLog;
+import pl.dietadvisor.productscraper.ProductScraper.service.WebDriverService;
+
+import java.math.BigDecimal;
+import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import static java.util.Objects.nonNull;
+import static pl.dietadvisor.productscraper.ProductScraper.enums.ProductScrapeJobSource.CALORIES_CALCULATOR;
+import static pl.dietadvisor.productscraper.ProductScraper.enums.ProductScrapeJobState.FAILED;
+
+@Service
+@RequiredArgsConstructor
+@Log4j2
+public class CaloriesCalculatorSource implements ProductScrapeSource {
+    private final WebDriverService webDriverService;
+    private RemoteWebDriver webDriver;
+
+    @Override
+    public ProductScrapeJobSource getSource() {
+        return CALORIES_CALCULATOR;
+    }
+
+    @Override
+    public List<ProductScrapeLog> scrape(ProductScrapeJob productScrapeJob) {
+        List<ProductScrapeLog> scrapeLogs = new ArrayList<>();
+
+        try {
+            openSite();
+
+            Integer page = 1;
+            boolean hasNextPage;
+            log.info("Job id: {}, scraping page: {}", productScrapeJob.getId(), page);
+
+            do {
+                scrapePage(scrapeLogs);
+                hasNextPage = goToNextPage();
+                page++;
+            } while (hasNextPage);
+        } catch (InterruptedException | MalformedURLException exception) {
+            log.error("Exception thrown when processing source: {}, product scrape job id: {}, message: {}",
+                    getSource(),
+                    productScrapeJob.getId(),
+                    exception.getMessage());
+            log.error(exception);
+
+            productScrapeJob.setState(FAILED);
+            productScrapeJob.setErrorMessage(exception.getMessage());
+        } finally {
+            if (nonNull(webDriver)) {
+                webDriver.quit();
+            }
+        }
+        return scrapeLogs;
+    }
+
+    private void openSite() throws MalformedURLException, InterruptedException {
+        webDriver = webDriverService.create("https://kalkulatorkalorii.net/tabela-kalorii");
+        webDriverService.sleep(2);
+    }
+
+    private void scrapePage(List<ProductScrapeLog> scrapeLogs) {
+        List<WebElement> trElements = webDriver.findElements(By.cssSelector("#content > div > div.container-fluid > div.container-fluid > section > div > div.span9 > div.tab-content > table > tbody > tr"));
+        trElements.stream()
+                .map(this::getScrapeLog)
+                .forEach(scrapeLogs::add);
+    }
+
+    private ProductScrapeLog getScrapeLog(WebElement trElement) {
+        return ProductScrapeLog.builder()
+                .name(trElement.findElement(By.cssSelector("td:nth-child(1) > a")).getText().trim())
+                .kcal(Integer.valueOf(trElement.findElement(By.cssSelector("td:nth-child(2)")).getText().trim()))
+                .proteins(parseToBigDecimal(trElement.findElement(By.cssSelector("td:nth-child(3)")).getText()))
+                .carbohydrates(parseToBigDecimal(trElement.findElement(By.cssSelector("td:nth-child(4)")).getText()))
+                .fats(parseToBigDecimal(trElement.findElement(By.cssSelector("td:nth-child(5)")).getText()))
+                .build();
+    }
+
+    private BigDecimal parseToBigDecimal(String rawValue) {
+        return new BigDecimal(rawValue.trim().replaceFirst(",", "."));
+    }
+
+    private boolean goToNextPage() throws InterruptedException {
+        By nextPageButtonSelector = By.cssSelector("#content > div > div.container-fluid > div.container-fluid > section > div > div.span9 > div.pagination-2 > ul > li:nth-child(7) > a");
+        if (webDriverService.isElementExist(webDriver, nextPageButtonSelector)) {
+            WebElement nextPageButton = webDriver.findElement(nextPageButtonSelector);
+
+            webDriver.executeScript("arguments[0].click()", nextPageButton);
+            webDriverService.sleep(1);
+            return true;
+        }
+
+        return false;
+    }
+}
