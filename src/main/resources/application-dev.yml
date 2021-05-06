@@ -1,3 +1,8 @@
+spring:
+  redis:
+    host: localhost
+    port: 6379
+
 product-scraper:
   aws:
     url: http://localhost:8000

@@ -11,6 +11,7 @@ import pl.dietadvisor.productscraper.ProductScraper.enums.ProductScrapeJobSource
 import pl.dietadvisor.productscraper.ProductScraper.model.ProductScrapeJob;
 import pl.dietadvisor.productscraper.ProductScraper.model.ProductScrapeLog;
 import pl.dietadvisor.productscraper.ProductScraper.service.WebDriverService;
+import pl.dietadvisor.productscraper.ProductScraper.service.redis.ProductScrapeJobCancelRedisService;
 
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
@@ -19,6 +20,7 @@ import java.util.List;
 
 import static java.util.Objects.nonNull;
 import static pl.dietadvisor.productscraper.ProductScraper.enums.ProductScrapeJobSource.CALORIES_CALCULATOR;
+import static pl.dietadvisor.productscraper.ProductScraper.enums.ProductScrapeJobState.CANCELLED;
 import static pl.dietadvisor.productscraper.ProductScraper.enums.ProductScrapeJobState.FAILED;
 
 @Service
@@ -26,7 +28,7 @@ import static pl.dietadvisor.productscraper.ProductScraper.enums.ProductScrapeJo
 @Log4j2
 public class CaloriesCalculatorSource implements ProductScrapeSource {
     private final WebDriverService webDriverService;
-    private RemoteWebDriver webDriver;
+    private final ProductScrapeJobCancelRedisService productScrapeJobCancelRedisService;
 
     @Override
     public ProductScrapeJobSource getSource() {
@@ -36,17 +38,24 @@ public class CaloriesCalculatorSource implements ProductScrapeSource {
     @Override
     public List<ProductScrapeLog> scrape(ProductScrapeJob productScrapeJob) {
         List<ProductScrapeLog> scrapeLogs = new ArrayList<>();
+        RemoteWebDriver webDriver = null;
 
         try {
-            openSite();
+            webDriver = openSite();
 
             Integer page = 1;
             boolean hasNextPage;
             log.info("Job id: {}, scraping page: {}", productScrapeJob.getId(), page);
 
             do {
-                scrapePage(scrapeLogs);
-                hasNextPage = goToNextPage();
+                if (productScrapeJobCancelRedisService.isCancelled(productScrapeJob.getId())) {
+                    log.info("Job: {} has been canceled on page: {}", productScrapeJob.getId(), page);
+                    productScrapeJob.setState(CANCELLED);
+                    return List.of();
+                }
+
+                scrapePage(webDriver, scrapeLogs);
+                hasNextPage = goToNextPage(webDriver);
                 page++;
             } while (hasNextPage);
         } catch (InterruptedException | MalformedURLException exception) {
@@ -66,12 +75,14 @@ public class CaloriesCalculatorSource implements ProductScrapeSource {
         return scrapeLogs;
     }
 
-    private void openSite() throws MalformedURLException, InterruptedException {
-        webDriver = webDriverService.create("https://kalkulatorkalorii.net/tabela-kalorii");
+    private RemoteWebDriver openSite() throws MalformedURLException, InterruptedException {
+        RemoteWebDriver webDriver = webDriverService.create("https://kalkulatorkalorii.net/tabela-kalorii");
         webDriverService.sleep(2);
+
+        return webDriver;
     }
 
-    private void scrapePage(List<ProductScrapeLog> scrapeLogs) {
+    private void scrapePage(RemoteWebDriver webDriver, List<ProductScrapeLog> scrapeLogs) {
         List<WebElement> trElements = webDriver.findElements(By.cssSelector("#content > div > div.container-fluid > div.container-fluid > section > div > div.span9 > div.tab-content > table > tbody > tr"));
         trElements.stream()
                 .map(this::getScrapeLog)
@@ -92,10 +103,10 @@ public class CaloriesCalculatorSource implements ProductScrapeSource {
         return new BigDecimal(rawValue.trim().replaceFirst(",", "."));
     }
 
-    private boolean goToNextPage() throws InterruptedException {
-        By nextPageButtonSelector = By.cssSelector("#content > div > div.container-fluid > div.container-fluid > section > div > div.span9 > div.pagination-2 > ul > li:nth-child(7) > a");
-        if (webDriverService.isElementExist(webDriver, nextPageButtonSelector)) {
-            WebElement nextPageButton = webDriver.findElement(nextPageButtonSelector);
+    private boolean goToNextPage(RemoteWebDriver webDriver) throws InterruptedException {
+        String nextPageButtonSelector = "#content > div > div.container-fluid > div.container-fluid > section > div > div.span9 > div.pagination-2 > ul > li:last-child > a";
+        if (webDriverService.isElementExist(webDriver, By.cssSelector(nextPageButtonSelector + " > i"))) {
+            WebElement nextPageButton = webDriver.findElement(By.cssSelector(nextPageButtonSelector));
 
             webDriver.executeScript("arguments[0].click()", nextPageButton);
             webDriverService.sleep(1);
