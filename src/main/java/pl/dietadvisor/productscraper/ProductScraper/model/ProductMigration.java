@@ -1,0 +1,17 @@
+package pl.dietadvisor.productscraper.ProductScraper.model;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class ProductMigration {
+    private ProductScrapeJob job;
+    private List<ProductScrapeLog> logs;
+}

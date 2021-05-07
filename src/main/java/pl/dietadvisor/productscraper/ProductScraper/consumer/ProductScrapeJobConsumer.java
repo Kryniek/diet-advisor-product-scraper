@@ -62,13 +62,13 @@ public class ProductScrapeJobConsumer {
         ProductScrapeSource scrapeSource = productScrapeSourceFactory.getSource(productScrapeJob.getSource());
         List<ProductScrapeLog> scrapeLogs = scrapeSource.scrape(productScrapeJob);
 
-        if (FAILED.equals(productScrapeJob.getState()) || CANCELLED.equals(productScrapeJob.getState())) {
+        if (FAILED.equals(productScrapeJob.getState())) {
             if (isEmpty(scrapeLogs)) {
                 return List.of();
             }
 
             productScrapeJob.setState(FINISHED_WITH_ERRORS);
-        } else {
+        } else if (IN_PROGRESS.equals(productScrapeJob.getState())) {
             productScrapeJob.setState(FINISHED);
         }
 

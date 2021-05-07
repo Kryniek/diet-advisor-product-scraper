@@ -30,4 +30,8 @@ public class ProductScrapeLogService {
 
         return (List<ProductScrapeLog>) repository.saveAll(productScrapeLogs);
     }
+
+    public List<ProductScrapeLog> getByJobId(String jobId) {
+        return repository.findByJobId(jobId);
+    }
 }
