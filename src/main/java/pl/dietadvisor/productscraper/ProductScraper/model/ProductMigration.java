@@ -13,5 +13,8 @@ import java.util.List;
 @NoArgsConstructor
 public class ProductMigration {
     private ProductScrapeJob job;
-    private List<ProductScrapeLog> logs;
+    private List<ProductScrapeLog> existingLogs;
+    private List<ProductScrapeLog> nonExistingLogs;
+    private List<String> migrationLogsIds;
+    private boolean saveAll;
 }

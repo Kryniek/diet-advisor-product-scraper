@@ -22,6 +22,10 @@ public class ProductScrapeLogService {
         return repository.findById(id).orElseThrow();
     }
 
+    public List<ProductScrapeLog> getByIds(List<String> ids) {
+        return repository.findByIdIn(ids);
+    }
+
     public List<ProductScrapeLog> createAll(List<ProductScrapeLog> productScrapeLogs) {
         productScrapeLogs.forEach(productScrapeLog -> {
             productScrapeLog.setId(null);

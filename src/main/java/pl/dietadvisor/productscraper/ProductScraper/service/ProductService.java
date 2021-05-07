@@ -10,6 +10,7 @@ import java.util.List;
 import static java.time.LocalDateTime.now;
 import static java.util.Objects.nonNull;
 import static org.apache.logging.log4j.util.Strings.isNotBlank;
+import static pl.dietadvisor.productscraper.ProductScraper.enums.ProductSource.USER;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +32,15 @@ public class ProductService {
         return repository.save(product);
     }
 
+    public List<Product> createAll(List<Product> products) {
+        products.forEach(product -> {
+            product.setId(null);
+            product.setCreatedAt(now());
+        });
+
+        return (List<Product>) repository.saveAll(products);
+    }
+
     public Product update(Product product) {
         Product existingProduct = getById(product.getId());
         if (isNotBlank(product.getName())) {
@@ -49,7 +59,12 @@ public class ProductService {
             existingProduct.setFats(product.getFats());
         }
         existingProduct.setUpdatedAt(now());
+        existingProduct.setSource(USER);
 
         return repository.save(existingProduct);
+    }
+
+    public List<Product> getByNames(List<String> names) {
+        return repository.findByNameIn(names);
     }
 }

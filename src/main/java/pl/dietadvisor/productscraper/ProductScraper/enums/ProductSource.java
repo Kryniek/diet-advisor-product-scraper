@@ -3,15 +3,15 @@ package pl.dietadvisor.productscraper.ProductScraper.enums;
 import static java.lang.String.format;
 import static java.util.Objects.isNull;
 
-public enum ProductScrapeJobState {
-    CREATED, IN_PROGRESS, FINISHED, FINISHED_WITH_ERRORS, FAILED, CANCELLED, MIGRATED;
+public enum ProductSource {
+    CALORIES_CALCULATOR, USER;
 
-    public static ProductScrapeJobState parse(String rawState) {
+    public static ProductSource parse(String rawState) {
         if (isNull(rawState)) {
             throw new RuntimeException("Can't parse field to enum. Field is empty.");
         }
 
-        for (ProductScrapeJobState state : ProductScrapeJobState.values()) {
+        for (ProductSource state : ProductSource.values()) {
             if (state.name().equals(rawState)) {
                 return state;
             }

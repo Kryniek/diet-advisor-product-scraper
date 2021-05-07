@@ -11,4 +11,6 @@ import java.util.List;
 @EnableScan
 public interface ProductScrapeLogRepository extends CrudRepository<ProductScrapeLog, String> {
     List<ProductScrapeLog> findByJobId(String jobId);
+
+    List<ProductScrapeLog> findByIdIn(List<String> ids);
 }

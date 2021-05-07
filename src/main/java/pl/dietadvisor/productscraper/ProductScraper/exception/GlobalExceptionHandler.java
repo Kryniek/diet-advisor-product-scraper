@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import pl.dietadvisor.productscraper.ProductScraper.exception.custom.BadRequestException;
 
 import java.util.NoSuchElementException;
 
@@ -18,8 +19,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(exception.getMessage(), NOT_FOUND);
     }
 
-    @ExceptionHandler(NullPointerException.class)
-    public ResponseEntity<Object> nullPointerException(NullPointerException exception, WebRequest request) {
+    @ExceptionHandler({
+            NullPointerException.class,
+            BadRequestException.class
+    })
+    public ResponseEntity<Object> nullPointerException(Exception exception, WebRequest request) {
         return new ResponseEntity<>(exception.getMessage(), BAD_REQUEST);
     }
 }
