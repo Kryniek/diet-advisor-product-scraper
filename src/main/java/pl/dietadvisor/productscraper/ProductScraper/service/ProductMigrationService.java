@@ -57,7 +57,7 @@ public class ProductMigrationService {
         List<ProductScrapeLog> logs = getMigrationLogs(productMigration);
         validateIfProductsIntendedToMigrationNotExists(logs);
 
-        List<Product> createdProducts = productService.createAll(logs.stream()
+        List<Product> createdProducts = productService.create(logs.stream()
                 .map(log -> Product.builder()
                         .source(ProductSource.parse(job.getSource().name()))
                         .name(log.getName())

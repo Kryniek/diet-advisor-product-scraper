@@ -10,6 +10,8 @@ spring:
         auto: create-only
         readCapacity: 5
         writeCapacity: 5
+  cache:
+    type: redis
 
 product-scraper:
   aws:
@@ -22,3 +24,6 @@ product-scraper:
       auto-offset-reset: earliest
     topic:
       products-scrape-job: products-scrape-job-topic
+  redis:
+    cache:
+      ttl-seconds: 604800

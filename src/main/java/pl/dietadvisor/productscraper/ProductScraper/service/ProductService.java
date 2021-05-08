@@ -1,6 +1,8 @@
 package pl.dietadvisor.productscraper.ProductScraper.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import pl.dietadvisor.productscraper.ProductScraper.model.Product;
 import pl.dietadvisor.productscraper.ProductScraper.repository.ProductRepository;
@@ -21,6 +23,7 @@ public class ProductService {
         return (List<Product>) repository.findAll();
     }
 
+    @Cacheable(value = "products", key = "#id")
     public Product getById(String id) {
         return repository.findById(id).orElseThrow();
     }
@@ -32,7 +35,7 @@ public class ProductService {
         return repository.save(product);
     }
 
-    public List<Product> createAll(List<Product> products) {
+    public List<Product> create(List<Product> products) {
         products.forEach(product -> {
             product.setId(null);
             product.setCreatedAt(now());
@@ -41,6 +44,7 @@ public class ProductService {
         return (List<Product>) repository.saveAll(products);
     }
 
+    @CachePut(value = "products", key = "#product.id")
     public Product update(Product product) {
         Product existingProduct = getById(product.getId());
         if (isNotBlank(product.getName())) {

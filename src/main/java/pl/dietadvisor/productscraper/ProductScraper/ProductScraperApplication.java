@@ -2,14 +2,14 @@ package pl.dietadvisor.productscraper.ProductScraper;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.kafka.annotation.EnableKafka;
+import pl.dietadvisor.productscraper.ProductScraper.config.annotations.ProductScraper;
 
 @SpringBootApplication
-@EnableKafka
+@ProductScraper
 public class ProductScraperApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(ProductScraperApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(ProductScraperApplication.class, args);
+    }
 
 }

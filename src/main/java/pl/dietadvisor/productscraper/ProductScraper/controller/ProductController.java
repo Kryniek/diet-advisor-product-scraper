@@ -1,16 +1,16 @@
 package pl.dietadvisor.productscraper.ProductScraper.controller;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pl.dietadvisor.productscraper.ProductScraper.model.Product;
 import pl.dietadvisor.productscraper.ProductScraper.service.ProductService;
 
 import javax.validation.constraints.NotBlank;
 import java.util.List;
+
+import static java.util.Objects.requireNonNull;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,5 +26,12 @@ public class ProductController {
     @GetMapping("/{id}")
     public ResponseEntity<Product> getById(@PathVariable @NotBlank String id) {
         return ResponseEntity.ok(service.getById(id));
+    }
+
+    @PutMapping
+    public ResponseEntity<Product> update(@RequestBody @NonNull Product product) {
+        requireNonNull(product.getId(), "Id must be set.");
+
+        return ResponseEntity.ok(service.update(product));
     }
 }
