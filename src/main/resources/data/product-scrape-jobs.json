@@ -1,0 +1,38 @@
+[
+  {
+    "id": "1dbd93b1-8faf-4bdf-80fd-a55acc3395d7",
+    "state": "CANCELLED",
+    "source": "CALORIES_CALCULATOR",
+    "errorMessage": null,
+    "scrapedProductsNumber": 100,
+    "createdAt": "2021-05-09T10:37:57.6918526",
+    "updatedAt": "2021-05-09T10:38:20.2794453"
+  },
+  {
+    "id": "c1f31a2d-7b4a-4a8d-8ad6-7c4e6bffc05e",
+    "state": "FINISHED",
+    "source": "CALORIES_CALCULATOR",
+    "errorMessage": null,
+    "scrapedProductsNumber": 168,
+    "createdAt": "2021-05-09T09:41:36.4276718",
+    "updatedAt": "2021-05-09T09:42:17.0497085"
+  },
+  {
+    "id": "2e2e46cb-b426-4940-92bc-1fbc72d16a68",
+    "state": "MIGRATED",
+    "source": "CALORIES_CALCULATOR",
+    "errorMessage": null,
+    "scrapedProductsNumber": 13568,
+    "createdAt": "2021-05-09T09:44:00.7653072",
+    "updatedAt": "2021-05-09T10:33:44.1665907"
+  },
+  {
+    "id": "f0adeb5b-3b3d-4a59-9b19-4ead2d2a1f06",
+    "state": "CANCELLED",
+    "source": "CALORIES_CALCULATOR",
+    "errorMessage": null,
+    "scrapedProductsNumber": 300,
+    "createdAt": "2021-05-09T10:36:31.8935725",
+    "updatedAt": "2021-05-09T10:37:40.2024121"
+  }
+]

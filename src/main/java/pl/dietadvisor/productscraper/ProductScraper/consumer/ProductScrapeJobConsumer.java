@@ -30,6 +30,11 @@ public class ProductScrapeJobConsumer {
     @KafkaListener(topics = "${product-scraper.kafka.topic.products-scrape-job}",
             groupId = "${product-scraper.kafka.consumer.group-id}")
     public void listen(ProductScrapeJob productScrapeJob) {
+        if (!isJobValidToProcess(productScrapeJob.getId())) {
+            log.error("Product scrape job: {} can't be processed.", productScrapeJob.getId());
+            return;
+        }
+
         try {
             log.info("Started scraping product scrape job: {}", productScrapeJob.getId());
             productScrapeJob = productScrapeJobService.update(ProductScrapeJob.builder()
@@ -56,6 +61,11 @@ public class ProductScrapeJobConsumer {
         } finally {
             log.info("Finished scraping product scrape job: {}", productScrapeJob.getId());
         }
+    }
+
+    private boolean isJobValidToProcess(String id) {
+        ProductScrapeJob job = productScrapeJobService.getById(id);
+        return CREATED.equals(job.getState());
     }
 
     private List<ProductScrapeLog> getScrapeLogs(ProductScrapeJob productScrapeJob) {

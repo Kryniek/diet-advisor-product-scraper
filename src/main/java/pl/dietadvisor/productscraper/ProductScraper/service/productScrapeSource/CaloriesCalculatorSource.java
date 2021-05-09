@@ -45,9 +45,10 @@ public class CaloriesCalculatorSource implements ProductScrapeSource {
 
             Integer page = 1;
             boolean hasNextPage;
-            log.info("Job id: {}, scraping page: {}", productScrapeJob.getId(), page);
 
             do {
+                log.info("Job id: {}, scraping page: {}", productScrapeJob.getId(), page);
+
                 if (productScrapeJobCancelRedisService.isCancelled(productScrapeJob.getId())) {
                     log.info("Job: {} has been canceled on page: {}", productScrapeJob.getId(), page);
                     productScrapeJob.setState(CANCELLED);
