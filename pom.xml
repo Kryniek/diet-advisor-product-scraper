@@ -13,49 +13,14 @@
     <version>0.0.1-SNAPSHOT</version>
     <properties>
         <java.version>11</java.version>
-        <lombok.version>1.18.20</lombok.version>
-        <spring-data-dynamodb.version>5.2.5</spring-data-dynamodb.version>
-        <selenium-java.version>3.141.59</selenium-java.version>
+        <Common.version>1.0.0-SNAPSHOT</Common.version>
     </properties>
     <dependencies>
-        <!-- SPRING BOOT -->
+        <!-- DIET ADVISOR -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.kafka</groupId>
-            <artifactId>spring-kafka</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-aop</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-
-        <!-- LIBS -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>${lombok.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.github.boostchicken</groupId>
-            <artifactId>spring-data-dynamodb</artifactId>
-            <version>${spring-data-dynamodb.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-java</artifactId>
-            <version>${selenium-java.version}</version>
+            <groupId>pl.dietadvisor</groupId>
+            <artifactId>Common</artifactId>
+            <version>${Common.version}</version>
         </dependency>
 
         <!-- TEST -->

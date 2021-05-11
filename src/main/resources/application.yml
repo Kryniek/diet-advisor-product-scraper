@@ -13,7 +13,7 @@ spring:
   cache:
     type: redis
 
-product-scraper:
+diet-advisor:
   aws:
     region: eu-west-1
   kafka:

@@ -1,4 +1,4 @@
-product-scraper:
+diet-advisor:
   aws:
     user-credentials:
       access-key:
