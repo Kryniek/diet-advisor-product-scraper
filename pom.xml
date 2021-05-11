@@ -8,19 +8,19 @@
         <version>2.4.4</version>
         <relativePath/>
     </parent>
-    <groupId>pl.diet-advisor.product-scraper</groupId>
-    <artifactId>ProductScraper</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <groupId>pl.diet-advisor</groupId>
+    <artifactId>product-scraper</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
     <properties>
         <java.version>11</java.version>
-        <Common.version>1.0.0-SNAPSHOT</Common.version>
+        <common.version>1.0.0-SNAPSHOT</common.version>
     </properties>
     <dependencies>
         <!-- DIET ADVISOR -->
         <dependency>
             <groupId>pl.dietadvisor</groupId>
-            <artifactId>Common</artifactId>
-            <version>${Common.version}</version>
+            <artifactId>common</artifactId>
+            <version>${common.version}</version>
         </dependency>
 
         <!-- TEST -->

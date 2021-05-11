@@ -1,4 +1,4 @@
-package pl.dietadvisor.productscraper.ProductScraper;
+package pl.dietadvisor.productscraper;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

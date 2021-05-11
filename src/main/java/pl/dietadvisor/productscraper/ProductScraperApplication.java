@@ -1,8 +1,8 @@
-package pl.dietadvisor.productscraper.ProductScraper;
+package pl.dietadvisor.productscraper;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import pl.dietadvisor.Common.productScraper.config.ProductScraper;
+import pl.dietadvisor.common.productScraper.config.ProductScraper;
 
 @SpringBootApplication
 @ProductScraper
