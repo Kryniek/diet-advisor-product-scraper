@@ -25,3 +25,7 @@ diet-advisor:
   redis:
     cache:
       ttl-seconds: 604800
+  selenium:
+    strength-factory:
+      email:
+      password:
